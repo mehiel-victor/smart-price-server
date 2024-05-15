@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Price } from './price.entity';
 
 @ObjectType()
 export class Product {
@@ -10,4 +11,7 @@ export class Product {
 
   @Field()
   imageUrl: string;
+
+  @Field(type => [Price])
+  prices: Price[];
 }

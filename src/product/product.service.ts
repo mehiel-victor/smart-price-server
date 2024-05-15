@@ -48,4 +48,10 @@ export class ProductService {
       }
     }
   }
+  async getProduct(id: number) {
+    return this.prisma.product.findUnique({
+      where: { id },
+      include: { prices: true },
+    });
+  }
 }

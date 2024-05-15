@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: chatlabsdb
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: chatlabsdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build: .
+    container_name: chatlabs-server
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://postgres:1234@postgres:5432/chatlabsdb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

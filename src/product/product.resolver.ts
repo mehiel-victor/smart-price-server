@@ -1,4 +1,4 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from './product.entity';
 
@@ -9,5 +9,10 @@ export class ProductResolver {
   @Query(returns => [Product])
   async products() {
     return this.productService.getProducts();
+  }
+
+  @Query(returns => Product)
+  async product(@Args('id') id: number) {
+    return this.productService.getProduct(id);
   }
 }

@@ -92,7 +92,7 @@ docker-compose up --build
 
 ## Rotas Disponíveis
 - `GET /products`: Retorna uma lista de produtos do banco de dados, incluindo nome e imagem.
-- `GET /products/`:id: Retorna os dados de um produto específico, incluindo nome, imagens, variação de preços e dados das lojas que vendem.
+- `GET /products/:id`: Retorna os dados de um produto específico, incluindo nome, imagens, variação de preços e dados das lojas que vendem.
 
 ## Scripts Disponíveis
 - `npm run start`: Inicia a aplicação em modo de produção.

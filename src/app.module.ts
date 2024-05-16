@@ -1,21 +1,25 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { PrismaModule } from './prisma/prisma.module';
-import { ProductModule } from './product/product.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { HttpModule } from '@nestjs/axios';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ProductResolver } from './graphql/resolvers/productResolver';
+import { PriceResolver } from './graphql/resolvers/priceResolver';
+import { ProductInfoResolver } from './graphql/resolvers/productInfoResolver';
+import { PrismaService } from './prisma/prisma.service';
+import { ScraperService } from './scraper/scraper.service';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
     }),
-    ScheduleModule.forRoot(),
-    HttpModule,
-    PrismaModule,
-    ProductModule,
   ],
+  controllers: [AppController],
+  providers: [AppService, PrismaService, ProductResolver, PriceResolver, ProductInfoResolver, ScraperService],
 })
 export class AppModule {}

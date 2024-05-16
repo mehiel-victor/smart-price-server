@@ -1,73 +1,102 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Server
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este projeto é responsável por armazenar e gerenciar informações de produtos e histórico de preços. Ele é dividido em três partes distintas:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. **API Scraper**: Simula um "scraper" da página de pesquisa do Google Shopping, buscando informações sobre preços e lojas de produtos.
+2. **Backend - Server**: Responsável por armazenar e gerenciar as informações de produtos e histórico de preços.
+3. **Frontend - Client**: Interface para visualização e gestão dos dados.
 
-## Description
+## Índice
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Pré-requisitos](#pré-requisitos)
+- [Instale as dependências do projeto](#instale-as-dependências-do-projeto)
+- [Configuração](#configuração)
+- [Executando o Projeto](#executando-o-projeto)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Rotas Disponíveis](#rotas-disponíveis)
+- [Scripts Disponíveis](#scripts-disponíveis)
 
-## Installation
+## Pré-requisitos
 
-```bash
-$ npm install
+Certifique-se de ter os seguintes softwares instalados:
+
+- [Node.js](https://nodejs.org/) (versão 16 ou superior)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+## Instale as dependências do projeto
+
+1. Clone o repositório:
+ ```sh
+   git clone https://github.com/mehiel-victor/server
+   cd server
+ ```
+2. Instale as dependências do projeto:
+```sh
+npm install
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+## Configuração
+Crie um arquivo .env na raiz do projeto e adicione as seguintes variáveis de ambiente:
+```sh
+DATABASE_URL=postgresql://your_user:your_password@postgres:5432/chatlabsdb
+CRON_INTERVAL=1
 ```
 
-## Test
+## Executando o projeto
+1. Inicie os contêineres Docker:
+```sh
+docker-compose up --build
+```
+2. A API estará disponível em http://localhost:3000/products
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+## Estrutura do Projeto
+```sh
+/server
+  ├── prisma
+  │   ├── migrations
+  │   │   └── 20240516172214_init
+  │   │       ├── migration.sql
+  │   │       └── migration_lock.toml
+  │   ├── schema.prisma
+  │   └── seed.ts
+  ├── src
+  │   ├── graphql
+  │   │   ├── models
+  │   │   │   ├── price.ts
+  │   │   │   ├── product.ts
+  │   │   │   └── productInfo.ts
+  │   │   ├── resolvers
+  │   │   │   ├── priceResolver.ts
+  │   │   │   ├── productInfoResolver.ts
+  │   │   │   └── productResolver.ts
+  │   │   ├── utils
+  │   │   │   └── schema.gql
+  │   ├── prisma
+  │   │   └── prisma.service.ts
+  │   ├── scrapper
+  │   │   ├── scraper.service.ts
+  │   │   ├── app.controller.ts
+  │   │   ├── app.module.ts
+  │   │   ├── app.service.ts
+  │   │   └── main.ts
+  ├── .dockerignore
+  ├── .env
+  ├── .gitignore
+  ├── Dockerfile
+  ├── docker-compose.yml
+  ├── package.json
+  ├── package-lock.json
+  └── README.md
 ```
 
-## Support
+## Rotas Disponíveis
+- `GET /products`: Retorna uma lista de produtos do banco de dados, incluindo nome e imagem.
+- `GET /products/`:id: Retorna os dados de um produto específico, incluindo nome, imagens, variação de preços e dados das lojas que vendem.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Scripts Disponíveis
+- `npm run start`: Inicia a aplicação em modo de produção.
+- `npm run dev`: Inicia a aplicação em modo de desenvolvimento.
+- `npm run prisma:generate`: Gera o cliente Prisma.
+- `npm run prisma:migrate:dev`: Executa as migrações do banco de dados em ambiente de desenvolvimento.
+- `npm run prisma:migrate:deploy`: Executa as migrações do banco de dados em ambiente de produção.

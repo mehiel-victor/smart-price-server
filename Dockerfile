@@ -1,29 +1,24 @@
+# Use a imagem base oficial do Node
+FROM node:16
 
-FROM node:18 AS builder
-
+# Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
+# Copia os arquivos package.json e package-lock.json para o diretório de trabalho
 COPY package*.json ./
+
+# Instala as dependências do projeto
 RUN npm install
 
+# Copia todo o restante dos arquivos do projeto para o diretório de trabalho
 COPY . .
-RUN npm run build
 
-
-FROM node:18
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install --only=production
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma ./prisma
-
-
+# Executa as migrações do Prisma
 RUN npx prisma generate
 
+# Expõe a porta que a aplicação vai rodar
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+# Comando para iniciar a aplicação
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
+  

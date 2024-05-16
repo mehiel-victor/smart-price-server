@@ -1,0 +1,71 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Price {
+  id: Float!
+  min: Float!
+  med: Float!
+  max: Float!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type ProductInfo {
+  id: Float!
+  imageUrl: String!
+  price: Float!
+  rating: Float!
+  scrapedFromUrl: String!
+  seller: String!
+  sellerUrl: String!
+  title: String!
+}
+
+type Product {
+  id: Float!
+  title: String!
+  imageUrl: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  prices: [Price!]!
+  productInfo: [ProductInfo!]!
+}
+
+type Query {
+  products: [Product!]!
+  product(id: Float!): Product
+}
+
+type Mutation {
+  createProduct(data: CreateProductInput!): Product!
+  createPrice(data: CreatePriceInput!): Price!
+  createProductInfo(data: CreateProductInfoInput!): ProductInfo!
+}
+
+input CreateProductInput {
+  title: String!
+  imageUrl: String!
+}
+
+input CreatePriceInput {
+  min: Float!
+  med: Float!
+  max: Float!
+  productId: Float!
+}
+
+input CreateProductInfoInput {
+  imageUrl: String!
+  price: Float!
+  rating: Float!
+  scrapedFromUrl: String!
+  seller: String!
+  sellerUrl: String!
+  title: String!
+  productId: Float!
+}

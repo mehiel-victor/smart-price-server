@@ -1,83 +1,86 @@
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.product.createMany({
-    data: [
-      { title: 'iPhone 14' },
-      { title: 'Notebook Samsung Galaxy Book2' },
-      { title: 'Smartwatch Amazfit Gts 4' },
-    ],
-  });
-
-  const iPhone = await prisma.product.findFirst({ where: { title: 'iPhone 14' } });
-  const notebook = await prisma.product.findFirst({ where: { title: 'Notebook Samsung Galaxy Book2' } });
-  const amazfit = await prisma.product.findFirst({ where: { title: 'Smartwatch Amazfit Gts 4' } });
-
-  await prisma.productDetail.createMany({
-    data: [
-      {
-        productId: iPhone.id,
-        image_url: 'https://example.com/iphone14.png',
-        price: 6999.99,
-        rating: 4.5,
-        scraped_from_url: 'https://example.com',
-        seller: 'Loja Apple',
-        seller_url: 'https://example.com/apple-store',
-        title: 'iPhone 14 na Apple Store'
+  const product1 = await prisma.product.create({
+    data: {
+      title: 'iPhone 14',
+      imageUrl: 'https://example.com/iphone14.jpg',
+      prices: {
+        create: {
+          min: 500000,
+          med: 550000,
+          max: 600000,
+        },
       },
-      {
-        productId: notebook.id,
-        image_url: 'https://example.com/galaxybook2.png',
-        price: 4999.99,
-        rating: 4.0,
-        scraped_from_url: 'https://example.com',
-        seller: 'Loja Samsung',
-        seller_url: 'https://example.com/samsung-store',
-        title: 'Notebook Samsung Galaxy Book2 na Samsung Store'
+      productInfo: {
+        create: {
+          imageUrl: 'https://example.com/iphone14.jpg',
+          price: 550000,
+          rating: 4.5,
+          scrapedFromUrl: 'https://example.com/iphone14',
+          seller: 'Example Store',
+          sellerUrl: 'https://example.com/store',
+          title: 'iPhone 14 - Example Store',
+        },
       },
-      {
-        productId: amazfit.id,
-        image_url: 'https://example.com/amazfitgts4.png',
-        price: 1299.99,
-        rating: 4.2,
-        scraped_from_url: 'https://example.com',
-        seller: 'Loja Amazfit',
-        seller_url: 'https://example.com/amazfit-store',
-        title: 'Smartwatch Amazfit Gts 4 na Amazfit Store'
+    },
+  });
+
+  const product2 = await prisma.product.create({
+    data: {
+      title: 'Notebook Samsung Galaxy Book2',
+      imageUrl: 'https://example.com/galaxybook2.jpg',
+      prices: {
+        create: {
+          min: 300000,
+          med: 350000,
+          max: 400000,
+        },
       },
-    ],
+      productInfo: {
+        create: {
+          imageUrl: 'https://example.com/galaxybook2.jpg',
+          price: 350000,
+          rating: 4.3,
+          scrapedFromUrl: 'https://example.com/galaxybook2',
+          seller: 'Example Store',
+          sellerUrl: 'https://example.com/store',
+          title: 'Notebook Samsung Galaxy Book2 - Example Store',
+        },
+      },
+    },
   });
 
-  // Adicionar preços iniciais para os produtos
-  await prisma.price.createMany({
-    data: [
-      { productId: iPhone.id, value: 6999.99 },
-      { productId: notebook.id, value: 4999.99 },
-      { productId: amazfit.id, value: 1299.99 },
-    ],
-  });
-
-  // Atualizar os produtos com os preços
-  await prisma.product.updateMany({
-    where: { id: iPhone.id },
-    data: { minPrice: 6999.99, medPrice: 6999.99, maxPrice: 6999.99 },
-  });
-
-  await prisma.product.updateMany({
-    where: { id: notebook.id },
-    data: { minPrice: 4999.99, medPrice: 4999.99, maxPrice: 4999.99 },
-  });
-
-  await prisma.product.updateMany({
-    where: { id: amazfit.id },
-    data: { minPrice: 1299.99, medPrice: 1299.99, maxPrice: 1299.99 },
+  const product3 = await prisma.product.create({
+    data: {
+      title: 'Smartwatch Amazfit Gts 4',
+      imageUrl: 'https://example.com/amazfitgts4.jpg',
+      prices: {
+        create: {
+          min: 100000,
+          med: 150000,
+          max: 200000,
+        },
+      },
+      productInfo: {
+        create: {
+          imageUrl: 'https://example.com/amazfitgts4.jpg',
+          price: 150000,
+          rating: 4.7,
+          scrapedFromUrl: 'https://example.com/amazfitgts4',
+          seller: 'Example Store',
+          sellerUrl: 'https://example.com/store',
+          title: 'Smartwatch Amazfit Gts 4 - Example Store',
+        },
+      },
+    },
   });
 }
 
 main()
-  .then(() => console.log('Seeded database'))
-  .catch((e) => console.error(e))
+  .catch(e => console.error(e))
   .finally(async () => {
     await prisma.$disconnect();
   });

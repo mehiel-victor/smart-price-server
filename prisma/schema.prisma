@@ -7,39 +7,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id       Int             @id @default(autoincrement())
-  title    String
-  minPrice Float?
-  medPrice Float?
-  maxPrice Float?
-  prices   Price[]
-  products ProductDetail[]
 
-  @@map("product")
+model Product {
+  id        Int       @id @default(autoincrement())
+  title     String    @unique
+  imageUrl  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  prices    Price[]
+  productInfo ProductInfo[]
 }
 
 model Price {
-  id        Int      @id @default(autoincrement())
-  value     Float
+  id        Int       @id @default(autoincrement())
+  min       Int
+  med       Int
+  max       Int
+  createdAt DateTime  @default(now())
   productId Int
-  createdAt DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id])
-
-  @@map("price")
+  product   Product   @relation(fields: [productId], references: [id])
 }
 
-model ProductDetail {
-  id               Int     @id @default(autoincrement())
-  productId        Int
-  image_url        String
-  price            Float
-  rating           Float
-  scraped_from_url String
-  seller           String
-  seller_url       String
-  title            String
-  product          Product @relation(fields: [productId], references: [id])
-
-  @@map("productdetail")
+model ProductInfo {
+  id              Int    @id @default(autoincrement())
+  imageUrl        String
+  price           Int
+  rating          Float
+  scrapedFromUrl  String
+  seller          String
+  sellerUrl       String
+  title           String
+  productId       Int
+  product         Product @relation(fields: [productId], references: [id])
 }

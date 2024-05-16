@@ -1,0 +1,62 @@
+type Product {
+  id: Int!
+  title: String!
+  imageUrl: String!
+  createdAt: String!
+  updatedAt: String!
+  prices: [Price!]!
+  productInfo: [ProductInfo!]!
+}
+
+type Price {
+  id: Int!
+  min: Int!
+  med: Int!
+  max: Int!
+  createdAt: String!
+}
+
+type ProductInfo {
+  id: Int!
+  imageUrl: String!
+  price: Int!
+  rating: Float!
+  scrapedFromUrl: String!
+  seller: String!
+  sellerUrl: String!
+  title: String!
+}
+
+input CreateProductInput {
+  title: String!
+  imageUrl: String!
+}
+
+input CreatePriceInput {
+  min: Int!
+  med: Int!
+  max: Int!
+  productId: Int!
+}
+
+input CreateProductInfoInput {
+  imageUrl: String!
+  price: Int!
+  rating: Float!
+  scrapedFromUrl: String!
+  seller: String!
+  sellerUrl: String!
+  title: String!
+  productId: Int!
+}
+
+type Query {
+  products: [Product!]!
+  product(id: Int!): Product
+}
+
+type Mutation {
+  createProduct(data: CreateProductInput!): Product!
+  createPrice(data: CreatePriceInput!): Price!
+  createProductInfo(data: CreateProductInfoInput!): ProductInfo!
+}

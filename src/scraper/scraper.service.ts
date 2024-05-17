@@ -68,9 +68,21 @@ export class ScraperService implements OnModuleInit {
 
     const existingProduct = await this.prisma.product.findUnique({
       where: { title },
+      include: {
+        prices: true,
+        productInfo: true,
+      },
     });
 
     if (existingProduct) {
+      await this.prisma.price.deleteMany({
+        where: { productId: existingProduct.id },
+      });
+      await this.prisma.productInfo.deleteMany({
+        where: { productId: existingProduct.id },
+      });
+
+      // Atualizar o produto existente
       await this.prisma.product.update({
         where: { title },
         data: {
@@ -94,12 +106,9 @@ export class ScraperService implements OnModuleInit {
             })),
           },
         },
-        include: {
-          prices: true,
-          productInfo: true,
-        },
       });
     } else {
+      // Criar um novo produto
       await this.prisma.product.create({
         data: {
           title,
@@ -122,10 +131,6 @@ export class ScraperService implements OnModuleInit {
               title: product.title,
             })),
           },
-        },
-        include: {
-          prices: true,
-          productInfo: true,
         },
       });
     }

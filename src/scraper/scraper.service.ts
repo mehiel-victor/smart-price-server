@@ -68,47 +68,19 @@ export class ScraperService implements OnModuleInit {
 
     const existingProduct = await this.prisma.product.findUnique({
       where: { title },
-      include: {
-        prices: true,
-        productInfo: true,
-      },
     });
 
     if (existingProduct) {
-      await this.prisma.price.deleteMany({
-        where: { productId: existingProduct.id },
-      });
-      await this.prisma.productInfo.deleteMany({
-        where: { productId: existingProduct.id },
-      });
-
-      // Atualizar o produto existente
-      await this.prisma.product.update({
-        where: { title },
-        data: {
-          imageUrl: products[0].image_url,
-          prices: {
-            create: {
-              min: prices.min,
-              med: prices.med,
-              max: prices.max,
-            },
-          },
-          productInfo: {
-            create: products.map(product => ({
-              imageUrl: product.image_url,
-              price: product.price,
-              rating: product.rating,
-              scrapedFromUrl: product.scraped_from_url,
-              seller: product.seller,
-              sellerUrl: product.seller_url,
-              title: product.title,
-            })),
-          },
-        },
-      });
-    } else {
-      // Criar um novo produto
+      await this.prisma.price.create({
+      data: {
+          min: prices.min,
+          max: prices.med,
+          med: prices.max,
+          createdAt: new Date(),
+          productId: existingProduct.id
+      }
+    })
+  } else {
       await this.prisma.product.create({
         data: {
           title,

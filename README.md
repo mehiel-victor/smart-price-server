@@ -59,7 +59,6 @@ docker-compose up --build
   │   │       ├── migration.sql
   │   │       └── migration_lock.toml
   │   ├── schema.prisma
-  │   └── seed.ts
   ├── src
   │   ├── graphql
   │   │   ├── models

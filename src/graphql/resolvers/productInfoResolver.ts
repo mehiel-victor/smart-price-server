@@ -1,5 +1,3 @@
-// src/graphql/resolvers/productInfoResolver.ts
-
 import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ProductInfo } from '../models/productInfo';
